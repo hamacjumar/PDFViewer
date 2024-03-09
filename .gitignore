@@ -3,3 +3,5 @@ test
 pdfjs/web
 
 # files
+.DS_Store
+PDFViewer.zip
