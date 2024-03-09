@@ -17,7 +17,7 @@ class PDFViewer {
         this.pdfLibs = ".pdfviewer"
         this.ip = "127.0.0.1"
         
-        // Copy the plugin assets into the app's hidden folder (~pdfviewer)
+        // Copy the plugin assets into the app's hidden folder (.pdfviewer)
         this.plugPath = app.GetPrivateFolder("Plugins")+"/"+this.name.toLowerCase()+"/pdfjs"
         app.CopyFolder(this.plugPath, this.pdfLibs)
         
