@@ -12,6 +12,8 @@ Contributors:
 ### Build
 To build and use this plugin, `zip` the root directory of this project and name it `PDFViewer.zip`. Paste the zip file into the `Plugins` folder of DroidScript and restart DroidScript.
 
+> NOTE: Do not include the `samples` folder in the zip file. It will only take space in your plugin.
+
 ### Usage
 ```js
 // Load the PDFViewer plugin at the top of your script
