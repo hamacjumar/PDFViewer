@@ -44,7 +44,7 @@ class PDFViewer {
         if( view.data.cb_onLoad ) view.data.cb_onLoad( info )
     }
     
-    /** ### View
+    /** ### AddView
      * View a pdf file into a given layout.
      * @param {dso-Layout} lay 
      * @param {str_path} file 
