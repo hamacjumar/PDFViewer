@@ -40,9 +40,9 @@ function OnStart() {
 ```
 
 #### Dependency
-Uses **pdf.js** library
-Version: _v2.11.338_
-Version link: _https://github.com/mozilla/pdf.js/releases/tag/v2.11.338_
+Uses **pdf.js** library<br>
+Version: _v2.11.338_<br>
+Version link: _https://github.com/mozilla/pdf.js/releases/tag/v2.11.338_<br>
 Release date: _Oct 2, 2021_
 
 
