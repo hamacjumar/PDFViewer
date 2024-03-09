@@ -6,6 +6,7 @@ v0.1.1
 A DroidScript Plugin to open and view pdf files.
 
 Author: _hamacjumar_
+
 Contributors: 
 
 ### Build
