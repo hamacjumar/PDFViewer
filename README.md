@@ -5,10 +5,6 @@ v0.1.1
 
 A DroidScript Plugin to open and view pdf files.
 
-Author: _hamacjumar_
-
-Contributors: 
-
 ### Build
 To build and use this plugin, `zip` the root directory of this project and name it `PDFViewer.zip`. Paste the zip file into the `Plugins` folder of DroidScript and restart DroidScript.
 
@@ -46,3 +42,7 @@ Uses **pdf.js** library by Mozilla<br>
 
 
 > Note: _For contributors, just add your GitHub account name._
+
+Author: _hamacjumar_
+
+Contributors: 
