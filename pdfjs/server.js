@@ -30,6 +30,8 @@ class Server {
         if( !data.cmd ) return // no command received
         switch( data.cmd ) {
             case "zoom": setZoom(...data.value); break;
+            case "page": setPage(...data.value); break;
+            case "page-offset": setPageOffset(...data.value); break;
             default: console.log("Undefined command");
         }
     }

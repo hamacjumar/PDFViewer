@@ -18,8 +18,11 @@ class PDFViewer {
         this.ip = "127.0.0.1"
         
         // Copy the plugin assets into the app's hidden folder (.pdfviewer)
-        this.plugPath = app.GetPrivateFolder("Plugins")+"/"+this.name.toLowerCase()+"/pdfjs"
-        app.CopyFolder(this.plugPath, this.pdfLibs)
+        if( !app.FolderExists(this.pdfLibs) ) {
+            console.log("Copying assets")
+            this.plugPath = app.GetPrivateFolder("Plugins")+"/"+this.name.toLowerCase()+"/pdfjs"
+        	app.CopyFolder(this.plugPath, this.pdfLibs)
+        }
         
         this.server = app.CreateWebServer( this.port )
         this.server.SetFolder( app.GetAppPath() )
@@ -44,11 +47,11 @@ class PDFViewer {
         if( view.data.cb_onLoad ) view.data.cb_onLoad( info )
     }
     
-    /** ### AddView
+    /** ### View
      * View a pdf file into a given layout.
      * @param {dso-Layout} lay 
      * @param {str_path} file 
-     * @param {num_frac} width 
+     * @param {num_frac} width
      * @param {num_frac} height 
      * @param {str_com} options `"Controls"`, `"Page"`, `"FitWidth"`, `"FitHeight"`
      */
@@ -70,7 +73,7 @@ class PDFViewer {
         file = "../" + file
         
         // create a webview where to load and render the pdf file
-        var web = app.AddWebView(lay, width, height, "NoScrollBars,IgnoreErrors,NoCors")
+        var web = app.AddWebView(lay, width, height, "NoScrollBars,IgnoreErrors,NoCors,AllowZoom")
         
         // save important data into the webview data prop
         web.data.options = options.toLowerCase()
@@ -111,6 +114,24 @@ class PDFViewer {
                 value: [zoom] // array to allow multiple args using spred operator cmd(...value)
             }
             var msg = JSON.stringify( data )
+            this.data.server.SendText(msg, this.data.ip, this.data.id)
+        }
+        
+        web.SetPage = function(page = 1) {
+            var data = {
+                cmd: "page", 
+                value: [page]
+            }
+            var msg = JSON.stringify( data ) 
+            this.data.server.SendText(msg, this.data.ip, this.data.id)
+        }
+        
+        web.SetPageOffset = function( offset ) {
+            var data = {
+                cmd: "page-offset", 
+                value: [offset]
+            }
+            var msg = JSON.stringify( data ) 
             this.data.server.SendText(msg, this.data.ip, this.data.id)
         }
     	

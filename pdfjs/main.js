@@ -2,7 +2,16 @@
 // ensure this is added and loaded
 pdfjsLib.GlobalWorkerOptions.workerSrc = "build/pdf.worker.js"
 
-var pdfDocument, viewportScale = null
+var pdfDocument,
+	viewportScale = null,
+	currPage = 1,
+	isPresentationMode = false,
+	canvas = [],
+	numPages = 0,
+	pdfPages = [],
+	isDocPage = false
+
+const viewerEl = document.getElementById( "viewer" )
 
 var url = new URL( location.href )
 var usp = url.searchParams
@@ -15,11 +24,20 @@ var loadingTask = pdfjsLib.getDocument( pdfFile )
 loadingTask.promise.then(async pdf => {
     // pdf is loaded
     pdfDocument = pdf
-    render( 1 )
+    var metadata = await pdf.getMetadata()
+    numPages = pdf.numPages
+    
+    if( options.includes("presentation") ) {
+        isPresentationMode = true
+        await renderPresentationMode()
+    }
+    else {
+        isPresentationMode = false
+        isDocPage = options.includes("page")
+        await renderDocumentMode()
+    }
     
     // create connection to server
-    var metadata = await pdf.getMetadata()
-    var numPages = pdf.numPages
     var data = {
         info: metadata.info,
         pageCount: numPages
@@ -34,47 +52,115 @@ loadingTask.promise.then(async pdf => {
     console.error( reason )
 })
 
-function render(page, customScale) {
+async function renderPresentationMode() {
+    viewerEl.classList.add("document-mode")
+    var el = document.createElement("canvas")
+    viewerEl.appendChild( el )
+    canvas[0] = el
+    await render(currPage, el)
+}
 
-    var pageNumber = page
+async function renderDocumentMode() {
+    viewerEl.classList.add("presentation-mode")
+    if( isDocPage ) {
+        viewerEl.classList.add("pages")
+    } 
+    for(var i=0; i<numPages; i++) {
+        var el = document.createElement("canvas")
+        viewerEl.appendChild( el )
+        canvas[i] = el
+        await render(i+1, el)
+    }
+}
+
+async function render(page, canvas, customScale) {
+
+    var pageNumber = page || currPage
     var scale = customScale || viewportScale
-
-    pdfDocument.getPage( pageNumber ).then(function( page ) {
-
-        var canvas = document.getElementById("canvas")
-        var context = canvas.getContext("2d")
+    
+    var pdfPage = pdfPages[page-1]
+    if( !pdfPage ) {
+        pdfPage = await pdfDocument.getPage( pageNumber )
+        pdfPages[page-1] = pdfPage
+    }
+    
+    var context = canvas.getContext("2d")
         
-        if(!viewportScale && typeof viewportScale !== "number") {
-            var vp = page.getViewport({scale: 1})
-            viewportScale = window.innerWidth / vp.width
-            scale = viewportScale
-        }
+    if(!viewportScale && typeof viewportScale !== "number") {
+        var vp = pdfPage.getViewport({scale: 1})
+        var innerWidth = window.innerWidth
+        if( isDocPage ) innerWidth -= 24
+        viewportScale = innerWidth / vp.width
+        scale = viewportScale
+    }
 
-        var viewport = page.getViewport({scale: scale})
+    var viewport = pdfPage.getViewport({scale: scale})
 
-        canvas.width = Math.floor( viewport.width )
-        canvas.height = Math.floor( viewport.height )
-        canvas.style.width = Math.floor(viewport.width) + "px"
-        canvas.style.height =  Math.floor(viewport.height) + "px"
+    canvas.width = Math.floor( viewport.width )
+    canvas.height = Math.floor( viewport.height )
+    canvas.style.width = Math.floor(viewport.width) + "px"
+    canvas.style.height =  Math.floor(viewport.height) + "px"
 
-        var renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        }
-        page.render( renderContext )
-
-        if( options.includes("page") ) {
-            canvas.style.boxShadow = "0px 1px 4px 2px rgba(0, 0, 0, 0.25)"
-            canvas.style.margin = "2rem"
-        }
-    })
+    var renderContext = {
+        canvasContext: context,
+        viewport: viewport
+    }
+    pdfPage.render( renderContext )
 }
 
 // handle zoom event
 function setZoom( zoom ) {
     viewportScale = zoom
-    render( 1 )
+    if( isPresentationMode ) {
+        render(currPage, canvas[0])
+    }
+    else {
+        for(var i=0; i<numPages; i++) {
+            render(i+1, canvas[i])
+        }
+    }
 }
+// handle page load
+function setPage( page ) {
+    if(!page || page == currPage) return
+    currPage = page
+    if( isPresentationMode ) {
+        render(currPage, canvas[0])
+    }
+    else { // for document just scroll to that canvas
+        var el = canvas[currPage-1]
+        if( el ) {
+            el.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
+        }
+    }
+}
+function setPageOffset( offset ) {
+    if(typeof offset == "number" && isDocPage) {
+        for(var i=0; i<numPages; i++) {
+            var el = canvas[i]
+            el.style.marginBottom = offset+"px"
+        }
+    }
+}
+
+// handle pinch zoom event
+var pinch = false
+document.addEventListener("touchstart", function( event ) {
+    pinch = (event.touches.length === 2)
+})
+document.addEventListener("touchend", function( event ) {
+    document.ontouchstart = null
+    document.ontouchend = null
+    if( pinch ) {
+        var scl = window.visualViewport.scale
+        if(scl !== viewportScale) {
+            viewportScale = scl
+            // render()
+        }
+        pinch = false
+    }
+})
+
 
 
 
