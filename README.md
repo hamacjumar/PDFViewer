@@ -12,9 +12,9 @@ Contributors:
 ### Build
 To build and use this plugin, `zip` the root directory of this project and name it `PDFViewer.zip`. Paste the zip file into the `Plugins` folder of DroidScript and restart DroidScript.
 
-> NOTE: Do not include the `samples` folder in the zip file. It will only take space in your plugin.
+> NOTE: Do not include the `samples` folder and files such as `.gitignore`, `build.sh`, `mypdf.pdf` and `README.md`,  in the zip file as it will only take space in your plugin.
 
-### Usage
+### Usage 
 ```js
 // Load the PDFViewer plugin at the top of your script
 app.LoadPlugin( "PDFViewer" )
@@ -42,10 +42,7 @@ function OnStart() {
 ```
 
 #### Dependency
-Uses **pdf.js** library<br>
-Version: _v2.11.338_<br>
-Version link: _https://github.com/mozilla/pdf.js/releases/tag/v2.11.338_<br>
-Release date: _Oct 2, 2021_
+Uses **pdf.js** library by Mozilla<br>
 
 
 > Note: _For contributors, just add your GitHub account name._
