@@ -37,6 +37,34 @@ function OnStart() {
     
 ```
 
+By default, the pdf will be rendered as document where you can scroll the pages vertically.
+If you want to display one page at a time, pass a `"presentation"` option like this:
+```js
+myPdf = pdf.AddView(lay, "mypdf.pdf", 0.8, 0.5, "presentation")
+```
+If you want to render the pdf as a page or paper just add a `"page"` option like this:
+```js
+myPdf = pdf.AddView(lay, "mypdf.pdf", 0.8, 0.5, "document,page")
+```
+> Works only on pdf view of type `document`
+
+To navigate to pages, just call the `setPage` method like this:
+```js
+myPdf.setPage( 3 ) // show the third page
+```
+To zoom the pdf viewer, call the `setZoom` method like this:
+```js
+myPdf.setZoom( 1.5 ) // 150% enlarge
+```
+- equal to 1 ---> PDF view fits the width of the layout.
+- less than 1 ---> Zoom out
+- greater than 1 ---> Zoom in
+
+You can also add page offset (bottom margin) for pdf view of type document and displayed as page like this:
+```js
+myPdf.setPageOffset( 24 ) // page bottom margin in pixels
+```
+
 #### Dependency
 Uses **pdf.js** library by Mozilla<br>
 
