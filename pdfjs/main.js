@@ -143,6 +143,21 @@ function setPageOffset( offset ) {
     }
 }
 
+function getPageCanvasData(page, name) {
+    var data = null
+    if( page ) {
+       	data = _getCanvasImage[page-1]
+    }
+    else {
+        for(var i=0; i<numPages; i++) {
+            data = _getCanvasImage( canvas[i] )
+        }
+    }
+}
+function _getCanvasImage( canvas ) {
+    
+}
+
 // handle pinch zoom event
 var pinch = false
 document.addEventListener("touchstart", function( event ) {

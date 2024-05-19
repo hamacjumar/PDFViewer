@@ -19,7 +19,7 @@ class PDFViewer {
         
         // Copy the plugin assets into the app's hidden folder (.pdfviewer)
         if( !app.FolderExists(this.pdfLibs) ) {
-            console.log("Copying assets")
+            console.log("Copying pdfviewer plugin assets")
             this.plugPath = app.GetPrivateFolder("Plugins")+"/"+this.name.toLowerCase()+"/pdfjs"
         	app.CopyFolder(this.plugPath, this.pdfLibs)
         }
@@ -39,6 +39,8 @@ class PDFViewer {
         }
 	}
 	
+	_handleImageData(request, info, ip, id) {}
+	
 	_setDocInfo(info, id) {
 	    var view = this.views.find(m => m.data.id == id)
         if( !view ) return
@@ -50,10 +52,10 @@ class PDFViewer {
     /** ### View
      * View a pdf file into a given layout.
      * @param {dso-Layout} lay 
-     * @param {str_path} file 
+     * @param {str_path} file Pdf file
      * @param {num_frac} width
-     * @param {num_frac} height 
-     * @param {str_com} options `"Controls"`, `"Page"`, `"FitWidth"`, `"FitHeight"`
+     * @param {num_frac} height
+     * @param {str_com} options Document|Presentation|Page
      */
      
      // Options definitions:
@@ -82,6 +84,7 @@ class PDFViewer {
         web.data.id = this.id + 1 // websocket client id
         web.data.server = this.server
         web.data.ip = this.ip
+        web.data.currPage = 1
         
         // push the webview into the views array
         this.views.push( web )
@@ -94,19 +97,36 @@ class PDFViewer {
          * Save a page as an image. If page number is not provided, it will save all the pages.
          * @param {num} pageIndex Page number
          */
-        web.Save = function( pageIndex ) {}
+        web.Save = function( pageIndex ) {
+            
+        }
         
-        web.Next = function() {}
+        web.Next = function() {
+            var currPage = this.data.currPage
+            var numPages = this.data.docInfo.pageCount
+            if(currPage < numPages) {
+                this.SetPage(currPage + 1)
+            }
+        }
     
-    	web.Previous = function() {}
+    	web.Previous = function() {
+            var currPage = this.data.currPage
+            if(currPage > 1) {
+                this.SetPage(currPage - 1)
+            }
+        }
     	
     	/** ### GetIndex
     	 * Returns the index of the current view
     	 */
     	web.GetIndex = function() { return this.data.index }
     	
-    	// Get document data
-    	web.GetDocument = function() {}
+    	/** ### GetIndex
+    	 * Returns the document's metadata
+    	 */
+    	web.GetDocumentData = function() {
+            return this.data.docInfo
+        }
     	
     	web.SetZoom = function( zoom ) {
     	    var data = {
@@ -117,18 +137,23 @@ class PDFViewer {
             this.data.server.SendText(msg, this.data.ip, this.data.id)
         }
         
-        web.SetPage = function(page = 1) {
-            var data = {
-                cmd: "page", 
-                value: [page]
+        web.SetPage = function( page ) {
+            if(typeof page != "number") return
+            print( this.data.docInfo )
+            if(page > 0 && page <= this.data.docInfo.pageCount) {
+                this.data.currPage = page
+                var data = {
+                    cmd: "page",
+                    value: [page]
+                }
+                var msg = JSON.stringify( data )
+                this.data.server.SendText(msg, this.data.ip, this.data.id)
             }
-            var msg = JSON.stringify( data ) 
-            this.data.server.SendText(msg, this.data.ip, this.data.id)
         }
         
         web.SetPageOffset = function( offset ) {
             var data = {
-                cmd: "page-offset", 
+                cmd: "page-offset",
                 value: [offset]
             }
             var msg = JSON.stringify( data ) 
@@ -137,7 +162,7 @@ class PDFViewer {
     	
     	// just for testing purposes
     	var params = "file="+file+"&opt="+web.data.options+"&id="+web.data.id
-    	web.LoadUrl("http://127.0.0.1:8888/"+this.pdfLibs+"/index.html?"+params)
+    	web.LoadUrl("http://127.0.0.1:"+this.port+"/"+this.pdfLibs+"/index.html?"+params)
         
         // return the webview control
         return web

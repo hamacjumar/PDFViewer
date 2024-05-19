@@ -32,6 +32,7 @@ class Server {
             case "zoom": setZoom(...data.value); break;
             case "page": setPage(...data.value); break;
             case "page-offset": setPageOffset(...data.value); break;
+            case "get-image-data": getImageData(...data.value); break;
             default: console.log("Undefined command");
         }
     }
