@@ -48,13 +48,13 @@ myPdf = pdf.AddView(lay, "mypdf.pdf", 0.8, 0.5, "document,page")
 ```
 > Works only on pdf view of type `document`
 
-To navigate to pages, just call the `setPage` method like this:
+To navigate to pages, just call the `SetPage` method like this:
 ```js
-myPdf.setPage( 3 ) // show the third page
+myPdf.SetPage( 3 ) // show the third page
 ```
-To zoom the pdf viewer, call the `setZoom` method like this:
+To zoom the pdf viewer, call the `SetZoom` method like this:
 ```js
-myPdf.setZoom( 1.5 ) // 150% enlarge
+myPdf.SetZoom( 1.5 ) // 150% enlarge
 ```
 - equal to 1 ---> PDF view fits the width of the layout.
 - less than 1 ---> Zoom out
@@ -62,7 +62,7 @@ myPdf.setZoom( 1.5 ) // 150% enlarge
 
 You can also add page offset (bottom margin) for pdf view of type document and displayed as page like this:
 ```js
-myPdf.setPageOffset( 24 ) // page bottom margin in pixels
+myPdf.SetPageOffset( 24 ) // page bottom margin in pixels
 ```
 
 #### Dependency
