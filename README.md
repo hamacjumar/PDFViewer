@@ -74,3 +74,36 @@ Uses **pdf.js** library by Mozilla<br>
 Author: _hamacjumar_
 
 Contributors: 
+
+
+### How to donate
+This plugin is free and maintained solely by me. If you find this plugin helpful and want to have it constantly updated for an amazing features, you can donate through my Paypal account here.
+
+Paypal: paypal.me/jumarhamac
+
+Any amount is highly appreaciated. Provide a message when you donate stating your name and a short information about you or your company which is no more than 20 words. Follow the guide below. I will add your name in the list of donors for this project.
+
+Message format:
+```md
+Title: PDFViewer-Plugin Donation
+Name: [name]
+Info: [short information about you]
+Logo: [link to your downloadable logo]
+```
+
+Example message:
+```md
+Title: PDFViewer-Plugin Donation
+Name: gineerslife
+Info: Freelancer and droidscript plugins creator.
+Logo: https://drive.google.com/id=....
+```
+
+Donations will be categorize as follows:
+0-10 USD: Bronze Backers
+11-25 USD: Silver Supporters
+26-50 USD: Gold Givers
+51-100 USD: Platinum Patrons
+101 USD and above: Diamond Donors
+
+Diamond Donors will be posted directly on all locations, sites, docs where this plugin is published.
