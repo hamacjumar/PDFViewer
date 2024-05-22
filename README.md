@@ -5,12 +5,12 @@ v0.1.1
 
 A DroidScript Plugin to open and view pdf files.
 
-### Build
+## Build
 To build and use this plugin, `zip` the root directory of this project and name it `PDFViewer.zip`. Paste the zip file into the `Plugins` folder of DroidScript and restart DroidScript.
 
 > NOTE: Do not include the `samples` folder and files such as `.gitignore`, `build.sh`, `mypdf.pdf` and `README.md`,  in the zip file as it will only take space in your plugin.
 
-### Usage 
+## Usage 
 ```js
 // Load the PDFViewer plugin at the top of your script
 app.LoadPlugin( "PDFViewer" )
@@ -76,12 +76,15 @@ Author: _hamacjumar_
 Contributors: 
 
 
+## Donations
+[See the list of donors for this amazing plugin](https://pdfviewer-plugin-backers.firebaseapp.com/)
+
 ### How to donate
 This plugin is free and maintained solely by me. If you find this plugin helpful and want to have it constantly updated for an amazing features, you can donate through my Paypal account here.
 
-Paypal: paypal.me/jumarhamac
+Paypal: **paypal.me/jumarhamac**
 
-Any amount is highly appreaciated. Provide a message when you donate stating your name and a short information about you or your company which is no more than 20 words. Follow the guide below. I will add your name in the list of donors for this project.
+Any amount is highly appreciated. Provide a message when you donate stating your name and a short information about you or your company which is no more than 20 words. Follow the guide below. I will add your name in the list of donors for this project.
 
 Message format:
 ```md
