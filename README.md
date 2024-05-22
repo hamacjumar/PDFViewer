@@ -100,10 +100,10 @@ Logo: https://drive.google.com/id=....
 ```
 
 Donations will be categorize as follows:
-0-10 USD: Bronze Backers
-11-25 USD: Silver Supporters
-26-50 USD: Gold Givers
-51-100 USD: Platinum Patrons
-101 USD and above: Diamond Donors
+- 0-10 USD: Bronze Backers
+- 11-25 USD: Silver Supporters
+- 26-50 USD: Gold Givers
+- 51-100 USD: Platinum Patrons
+- 101 USD and above: Diamond Donors
 
 Diamond Donors will be posted directly on all locations, sites, docs where this plugin is published.
