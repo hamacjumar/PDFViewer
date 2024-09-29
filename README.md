@@ -1,5 +1,5 @@
 ## PDFViewer
-v0.1.1
+v0.21
 
 > Under development!
 
@@ -63,6 +63,11 @@ myPdf.SetZoom( 1.5 ) // 150% enlarge
 You can also add page offset (bottom margin) for pdf view of type document and displayed as page like this:
 ```js
 myPdf.SetPageOffset( 24 ) // page bottom margin in pixels
+```
+
+To save a page as PNG image, call the `Save` method like this:
+```js
+myPdf.Save(2, "path/to/image.png", onSave) // Save the second page as png image
 ```
 
 #### Dependency
