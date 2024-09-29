@@ -157,6 +157,22 @@ function getPageCanvasData(page, name) {
 function _getCanvasImage( canvas ) {
     
 }
+function getImageData(page = 1) {
+    var c = canvas[page - 1], chunkSize = 4000
+    var base64 = c.toDataURL('image/png')
+    var totalChunks = Math.ceil(base64.length / chunkSize)
+    for (let i = 0; i < totalChunks; i++) {
+        var chunk = base64.slice(i * chunkSize, (i + 1) * chunkSize)
+        var data = {
+            cmd: "image-data",
+          	type: 'chunk',
+          	index: i,
+          	total: totalChunks,
+          	data: chunk
+        }
+        server.Send( data )
+    }
+}
 
 // handle pinch zoom event
 var pinch = false

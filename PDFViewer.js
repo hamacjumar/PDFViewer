@@ -17,6 +17,10 @@ class PDFViewer {
         this.pdfLibs = ".pdfviewer"
         this.ip = "127.0.0.1"
         
+        this.base64Data = ""
+        this.imageName = ""
+        this.onSaveCallback = null
+        
         // Copy the plugin assets into the app's hidden folder (.pdfviewer)
         if( !app.FolderExists(this.pdfLibs) ) {
             console.log("Copying pdfviewer plugin assets")
@@ -35,11 +39,19 @@ class PDFViewer {
         if( !data.cmd ) return console.log(this.name+" : Received undefined command from client. ID:"+id)
     	switch( data.cmd ) {
             case "docInfo": this._setDocInfo(data.value, id); break;
+            case "image-data": this._handleImageData( data )
             default: 
         }
 	}
 	
-	_handleImageData(request, info, ip, id) {}
+	_handleImageData( data ) {
+	    if(data.index == 0) this.base64Data = ""
+	    this.base64Data += data.data
+	    if(data.index == data.total - 1) {
+            app.WriteFile(this.imageName, this.base64Data, "base64")
+            if( this.onSaveCallback ) this.onSaveCallback()
+        }
+    }
 	
 	_setDocInfo(info, id) {
 	    var view = this.views.find(m => m.data.id == id)
@@ -85,6 +97,7 @@ class PDFViewer {
         web.data.server = this.server
         web.data.ip = this.ip
         web.data.currPage = 1
+        web.data.parent = this
         
         // push the webview into the views array
         this.views.push( web )
@@ -97,8 +110,15 @@ class PDFViewer {
          * Save a page as an image. If page number is not provided, it will save all the pages.
          * @param {num} pageIndex Page number
          */
-        web.Save = function( pageIndex ) {
-            
+        web.Save = function(pageIndex = 1, name, callback) {
+            this.data.parent.imageName = name
+            this.data.parent.onSaveCallback = callback
+            var data = {
+                cmd: "get-image-data",
+                value: [pageIndex] // array to allow multiple args using spred operator cmd(...value)
+            }
+            var msg = JSON.stringify( data )
+            this.data.server.SendText(msg, this.data.ip, this.data.id)
         }
         
         web.Next = function() {

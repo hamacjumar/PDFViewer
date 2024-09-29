@@ -22,7 +22,7 @@ class Server {
     }
 
     ws_onopen() {
-        console.log("open")
+        // console.log("open")
     }
 
     ws_onmessage( msg ) {
@@ -32,13 +32,13 @@ class Server {
             case "zoom": setZoom(...data.value); break;
             case "page": setPage(...data.value); break;
             case "page-offset": setPageOffset(...data.value); break;
-            case "get-image-data": getImageData(...data.value); break;
-            default: console.log("Undefined command");
+            case "get-image-data": setTimeout(() => { getImageData(...data.value) }, 200); break;
+            default: console.log("> undefined pdfjs command");
         }
     }
 
     ws_onclose() {
-        console.log("close")
+        // console.log("close")
     }
 
     ws_onerror(e) {
